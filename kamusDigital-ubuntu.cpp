@@ -2,6 +2,7 @@
 #include <string>
 using namespace std;
 
+//struktur tree
 struct Node{
     string key;
     string Meaning;
@@ -10,6 +11,8 @@ struct Node{
 };
 
 Node* root = nullptr, *n = nullptr, *temp = nullptr;
+
+//pembuatan Node
 Node* createNode(string key,string meaning){
     n=new Node;
     n->key=key;
@@ -18,6 +21,8 @@ Node* createNode(string key,string meaning){
     n->right=nullptr;
     return n;
 }
+
+//penambahan data
 void insertNode(Node*& root, string key, string meaning){
     if(root==NULL)
         root=createNode(key,meaning);
@@ -26,6 +31,7 @@ void insertNode(Node*& root, string key, string meaning){
     else
         insertNode(root->right,key,meaning);
 }
+//search node memastikan nilai true or false
 bool cari(Node* root, string key) {
     if (root == nullptr)
         return false;
@@ -36,6 +42,7 @@ bool cari(Node* root, string key) {
     else
         return true;
 }
+//mencari dan mengembalikan nilai yang dicari
 Node* search(Node* root, string key) {
     if (root == nullptr || root->key == key) {
         return root;
@@ -45,6 +52,7 @@ Node* search(Node* root, string key) {
     }
     return search(root->right, key);
 }
+//menampilkan node yang ingin ditampilkan
 void diplayNode(Node*reslut){
     if(root!=NULL){
         cout<<"kata : "<<reslut->key<<endl;
@@ -53,24 +61,24 @@ void diplayNode(Node*reslut){
     }
     cout<<"Kata Tidak Ditemukan atau belum ditambahkan..."<<endl;
 }
+
+//menampilkan semua tree menggunakan inorder traversal Asc
 void displayAz(Node* root) {
     if (root == nullptr) return;
-    displayAz(root->right);
-    cout << root->key << "\t: "<<root->Meaning<<endl;
     displayAz(root->left);
+    cout << root->key << "\t: "<<root->Meaning<<endl;
+    displayAz(root->right);
 }
+
+//menampilkan semua tree menggunakan inorder traversal Dsc
 void displayZa(Node* root) {
     if (root == nullptr) return;
     displayZa(root->right);
     cout << root->key << "\t: "<<root->Meaning<<endl;
     displayZa(root->left);
 }
-void displayInc(Node *root){
-    if (root == nullptr) return;
-    displayInc(root->left);
-    cout << root->key << "\t: "<<root->Meaning<<endl;
-    displayInc(root->right);
-}
+
+//update node dengan inputan key
 void updateNode(Node* root, string key, string newMeaning) {
     if (root == nullptr) {
         cout << "Kata tidak ditemukan dalam kamus.\n";
@@ -87,6 +95,48 @@ void updateNode(Node* root, string key, string newMeaning) {
         cout<<"Arti Baru: " << newMeaning << endl;
     }
 }
+//cari nilai min dalam node
+Node* cariMin(Node* root) {
+    if (root == nullptr)
+        return nullptr;
+    while (root->left != nullptr)
+        root = root->left;
+    return root;
+}
+
+//menghapus node sesuai inputan
+void hapus(Node*& root, string key) {
+    if (root == nullptr)
+        return;
+    else if (key < root->key)
+        hapus(root->left, key);
+    else if (key > root->key)
+        hapus(root->right, key);
+    else {
+        if (root->left == nullptr && root->right == nullptr) {
+            delete(root);
+            root = nullptr;
+        }
+        else if (root->left == nullptr) {
+            temp = root;
+            root = root->right;
+            delete(temp);
+            temp = nullptr;
+        }
+        else if (root->right == nullptr) {
+            temp = root;
+            root = root->left;
+            delete(temp);
+            temp = nullptr;
+        }
+        else {
+            temp = cariMin(root->right);
+            root->key = temp->key;
+            hapus(root->right, temp->key);
+        }
+    }
+}
+//delete tree atau all node
 void deleteAllNodes(Node* &root) {
     if (root == nullptr) return;
     deleteAllNodes(root->left);
@@ -94,6 +144,7 @@ void deleteAllNodes(Node* &root) {
     delete root;
     root = nullptr;
 }
+
 void home1();
 void insertDatabase();
 void introduction();
@@ -101,8 +152,7 @@ void homePage();
 void displayOne(){
     int choice;
     string key,meaning,newMeaning;
-    insertDatabase();
-    while(choice!=6){
+    while(choice!=7){
         homePage();
         cin>>choice;
         cin.clear();
@@ -168,112 +218,20 @@ void displayOne(){
                 system("sleep 1.5");
                 break;
             }case 6:{
-                cout<<"See You Next Time..."<<endl;
-                cout<<"Sampai Jumpa..."<<endl;
-                break;
-            }default:{
-                cout<<"Inputan Tidak Valid..."<<endl;
+                cout<<"Hapus kata"<<endl<<endl;
+                cout<<"Masukkan Kata: ";getline(cin,key);
+                if(cari(root,key)==true){
+                    Node *result = search(root,key);
+                    diplayNode(result);
+                    hapus(root,key);
+                    cout<<"Berhasil Dihapuss"<<endl;
+                }else{
+                    cout<<"Kata : "<<key<<" Tidak ditemukan..."<<endl;
+                }
                 system("sleep 1.5");
                 break;
             }
-        }
-    }
-}
-void displaytwo(){
-    deleteAllNodes(root);
-    int choice;
-    string key,meaning,newMeaning;
-    while(choice!=6){
-        homePage();
-        cin>>choice;
-        cin.clear();
-        cin.ignore();
-        system("clear");
-        switch(choice){
-            case 1:{
-                cout<<"Menambah Kosakata"<<endl;
-                cout<<"--------------------"<<endl;
-                cout<<"Masukkan Kata : ";getline(cin,key);
-                cout<<"Masukkan Arti : ";getline(cin,meaning);
-                insertNode(root,key,meaning);
-                system("clear");
-                cout<<"Menambah Kosakata"<<endl;
-                cout<<"kata     : "<<key<<endl;
-                cout<<"Artinya  : "<<meaning<<endl;
-                cout<<"Berhasil Ditambahkan..."<<endl;
-                system("sleep 1.5");
-                break;
-            }case 2:{
-                if(root==NULL){
-                    cout<<"Kata Belum Ada."<<endl<<"Silahkan tambahkan kosakata terlebih dahulu..."<<endl;
-                }else{
-                    cout<<"Mencari kata"<<endl;
-                    cout<<"--------------------"<<endl;
-                    cout<<"Masukkan Kata : ";getline(cin,key);
-                    if(cari(root,key)==true){
-                        Node *result = search(root,key);
-                        diplayNode(result);
-                    }else{
-                        cout<<"Kata : "<<key<<" Tidak ditemukan..."<<endl;
-                    }
-                }
-                system("sleep 1.5");
-                break;
-            }case 3:{
-                if(root==NULL){
-                    cout<<"Kata Belum Ada."<<endl<<"Silahkan tambahkan kosakata terlebih dahulu..."<<endl;
-                }else{
-                    cout<<"Isi Kamus[A-Z]"<<endl;
-                    cout<<"----------------------------"<<endl;
-                    cout<<"Kata :   Artinya"<<endl;
-                    displayAz(root);    
-                }
-                system("sleep 1.5");
-                break;
-            }case 4:{
-                if(root==NULL){
-                    cout<<"Kata Belum Ada."<<endl<<"Silahkan tambahkan kosakata terlebih dahulu..."<<endl;
-                }else{
-                    cout<<"Isi Kamus[Z-A]"<<endl;
-                    cout<<"----------------------------"<<endl;
-                    cout<<"Kata     :   Artinya"<<endl;
-                    displayZa(root);    
-                }
-                system("sleep 1.5");
-                break;
-            }case 5:{
-                cout<<"Perbaharui Kata"<<endl;
-                cout<<"Masukkan Kata     : ";getline(cin,key);
-                cout<<"Masukkan arti Baru: ";getline(cin,meaning);
-                updateNode(root,key,meaning);
-                system("sleep 1.5");
-                break;
-            }case 6:{
-                cout<<"See You Next Time..."<<endl;
-                cout<<"Sampai Jumpa..."<<endl;
-                break;
-            }default:{
-                cout<<"Inputan Tidak Valid..."<<endl;
-                system("sleep 1.5");
-                break;
-            }
-        }
-    }
-}
-int main(){
-    int choice,home;
-    string key,meaning;
-    introduction();
-    while(home!=3){
-        home1();cin>>home;
-        cin.clear();
-        cin.ignore();
-        switch(home){
-            case 1:{
-                displayOne();        
-            }case 2:{
-                displaytwo();
-            }case 3:{
+            case 7:{
                 cout<<"See You Next Time..."<<endl;
                 cout<<"Sampai Jumpa..."<<endl;
                 break;
@@ -286,6 +244,35 @@ int main(){
     }
 }
 
+int main(){
+    int choice,home;
+    string key,meaning;
+    introduction();
+    while(home!=3){
+        insertDatabase();
+        home1();cin>>home;
+        cin.clear();
+        cin.ignore();
+        switch(home){
+            case 1:{
+                displayOne();break;
+            }case 2:{
+                deleteAllNodes(root);
+                displayOne();
+                break;
+            }case 3:{
+                cout<<"See You Next Time..."<<endl;
+                cout<<"Sampai Jumpa..."<<endl;
+                break;
+            }default:{
+                cout<<"Inputan Tidak Valid..."<<endl;
+                system("sleep 1.5");
+                break;
+            }
+        }
+    }
+}
+//introduction aplikasi
 void introduction() {
     system("clear");
     cout<<"==========================================="<<endl;
@@ -303,6 +290,7 @@ void introduction() {
     cout<<"==========================================="<<endl;
     system("sleep 1.5");
 }
+//home page aplikasi
 void home1(){
     system("clear");
     cout<<"Selamat Datang Di Program Kamus Digital Bahasa Inggris"<<endl;
@@ -312,6 +300,8 @@ void home1(){
     cout<<"3. Keluar Dari Aplikasih"<<endl;
     cout<<"Masukkan Pilihan[1..3]: ";
 }
+
+//sub home page aplikasi
 void homePage(){
     system("clear");
     cout<<"Selamat Datang Di Program Kamus Digital"<<endl;
@@ -320,9 +310,15 @@ void homePage(){
     cout<<"3. Tampilkan Semua Kata[A-Z]"<<endl;
     cout<<"4. Tampilkan Semua Kata[Z-A]"<<endl;
     cout<<"5. Perbaharui Arti Kata"<<endl;
-    cout<<"6. Kembali Ke Beranda"<<endl;
+    cout<<"6. Hapus Kata"<<endl;
+    cout<<"7. Kembali Ke Beranda"<<endl;
     cout<<"Masukkan Pilihan[1..6] :";
 }
+
+/*
+insert manual semua data secara default pada saat program
+dijalankan ini menggunakan array 2 dimensi
+*/
 void insertDatabase(){
     string data[][2] = {
         {"hello", "halo"}, {"good", "baik"}, {"morning", "pagi"}, {"night", "malam"}, {"thanks", "terima kasih"},
