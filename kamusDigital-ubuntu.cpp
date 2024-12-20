@@ -95,13 +95,12 @@ void deleteAllNodes(Node* &root) {
     root = nullptr;
 }
 void home1();
-void insertDatabase();
+void insertDbTmp();
 void introduction();
 void homePage();
 void displayOne(){
     int choice;
     string key,meaning,newMeaning;
-    insertDatabase();
     while(choice!=6){
         homePage();
         cin>>choice;
@@ -147,7 +146,7 @@ void displayOne(){
                     cout<<"Kata :   Artinya"<<endl;
                     displayAz(root);    
                 }
-                system("sleep 1.5");
+                system("sleep 4.5");
                 break;
             }case 4:{
                 if(root==NULL){
@@ -158,96 +157,23 @@ void displayOne(){
                     cout<<"Kata     :   Artinya"<<endl;
                     displayZa(root);    
                 }
-                system("sleep 1.5");
+                system("sleep 4.5");
                 break;
             }case 5:{
-                cout<<"Perbaharui Kata"<<endl;
-                cout<<"Masukkan Kata     : ";getline(cin,key);
-                cout<<"Masukkan arti Baru: ";getline(cin,newMeaning);
-                updateNode(root,key,newMeaning);
-                system("sleep 1.5");
-                break;
-            }case 6:{
-                cout<<"See You Next Time..."<<endl;
-                cout<<"Sampai Jumpa..."<<endl;
-                break;
-            }default:{
-                cout<<"Inputan Tidak Valid..."<<endl;
-                system("sleep 1.5");
-                break;
-            }
-        }
-    }
-}
-void displaytwo(){
-    deleteAllNodes(root);
-    int choice;
-    string key,meaning,newMeaning;
-    while(choice!=6){
-        homePage();
-        cin>>choice;
-        cin.clear();
-        cin.ignore();
-        system("clear");
-        switch(choice){
-            case 1:{
-                cout<<"Menambah Kosakata"<<endl;
-                cout<<"--------------------"<<endl;
-                cout<<"Masukkan Kata : ";getline(cin,key);
-                cout<<"Masukkan Arti : ";getline(cin,meaning);
-                insertNode(root,key,meaning);
-                system("clear");
-                cout<<"Menambah Kosakata"<<endl;
-                cout<<"kata     : "<<key<<endl;
-                cout<<"Artinya  : "<<meaning<<endl;
-                cout<<"Berhasil Ditambahkan..."<<endl;
-                system("sleep 1.5");
-                break;
-            }case 2:{
                 if(root==NULL){
                     cout<<"Kata Belum Ada."<<endl<<"Silahkan tambahkan kosakata terlebih dahulu..."<<endl;
                 }else{
-                    cout<<"Mencari kata"<<endl;
-                    cout<<"--------------------"<<endl;
-                    cout<<"Masukkan Kata : ";getline(cin,key);
-                    if(cari(root,key)==true){
-                        Node *result = search(root,key);
-                        diplayNode(result);
+                    cout<<"Perbaharui Kata"<<endl;
+                    cout<<"Masukkan Kata     : ";getline(cin,key);
+                    if(cari(root,key)==false){
+                        cout<<"Kata Tidak Ditemukan atau belum ditambahkan..."<<endl;
                     }else{
-                        cout<<"Kata : "<<key<<" Tidak ditemukan..."<<endl;
+                        cout<<"Masukkan arti Baru: ";getline(cin,newMeaning);
+                        updateNode(root,key,newMeaning);
                     }
                 }
                 system("sleep 1.5");
                 break;
-            }case 3:{
-                if(root==NULL){
-                    cout<<"Kata Belum Ada."<<endl<<"Silahkan tambahkan kosakata terlebih dahulu..."<<endl;
-                }else{
-                    cout<<"Isi Kamus[A-Z]"<<endl;
-                    cout<<"----------------------------"<<endl;
-                    cout<<"Kata :   Artinya"<<endl;
-                    displayAz(root);    
-                }
-                system("sleep 1.5");
-                break;
-            }case 4:{
-                if(root==NULL){
-                    cout<<"Kata Belum Ada."<<endl<<"Silahkan tambahkan kosakata terlebih dahulu..."<<endl;
-                }else{
-                    cout<<"Isi Kamus[Z-A]"<<endl;
-                    cout<<"----------------------------"<<endl;
-                    cout<<"Kata     :   Artinya"<<endl;
-                    displayZa(root);    
-                }
-                system("sleep 1.5");
-                break;
-            }case 5:{
-                cout<<"Perbaharui Kata"<<endl;
-                cout<<"Masukkan Kata     : ";getline(cin,key);
-                cout<<"Masukkan arti Baru: ";getline(cin,meaning);
-                updateNode(root,key,meaning);
-                system("sleep 1.5");
-                break;
             }case 6:{
                 cout<<"See You Next Time..."<<endl;
                 cout<<"Sampai Jumpa..."<<endl;
@@ -260,19 +186,23 @@ void displaytwo(){
         }
     }
 }
+
 int main(){
     int choice,home;
     string key,meaning;
     introduction();
     while(home!=3){
+        insertDbTmp();
         home1();cin>>home;
         cin.clear();
         cin.ignore();
         switch(home){
             case 1:{
-                displayOne();        
+                displayOne();
+                break;
             }case 2:{
-                displaytwo();
+                deleteAllNodes(root);
+                displayOne();
             }case 3:{
                 cout<<"See You Next Time..."<<endl;
                 cout<<"Sampai Jumpa..."<<endl;
@@ -297,16 +227,18 @@ void introduction() {
     cout<<"-------------------------------------------"<<endl;
     system("sleep 1.5");
     cout<<"= Aplikasi ini di dirancang oleh:         ="<<endl;
-    cout<<"= 1. Ichwal      \t13020230049       ="<<endl;
-    cout<<"= 2. Andi Rizky Akbar \t13020230054       ="<<endl;
-    cout<<"= 3. Muh Rifky Ahlul \t13020230038       ="<<endl;
+    cout<<"= 1. Ichwal      \t: 13020230049     ="<<endl;
+    cout<<"= 2. Andi Rizky Akbar \t: 13020230054     ="<<endl;
+    cout<<"= 3. Muh Rifky Ahlul \t: 13020230041     ="<<endl;
     cout<<"==========================================="<<endl;
     system("sleep 1.5");
 }
 void home1(){
     system("clear");
-    cout<<"Selamat Datang Di Program Kamus Digital Bahasa Inggris"<<endl;
-    cout<<"Di bawah terdapat 2 pilihan:"<<endl;
+    cout<<"--------------------------------------------------------"<<endl;
+    cout<<"=Selamat Datang Di Program Kamus Digital Bahasa Inggris="<<endl;
+    cout<<"--------------------------------------------------------"<<endl;
+    cout<<"Di bawah terdapat 3 Pilihan Menu:"<<endl;
     cout<<"1. Kamus Telah Berisi 100 kata"<<endl;
     cout<<"2. Kamus Masi Kosong"<<endl;
     cout<<"3. Keluar Dari Aplikasih"<<endl;
@@ -323,7 +255,7 @@ void homePage(){
     cout<<"6. Kembali Ke Beranda"<<endl;
     cout<<"Masukkan Pilihan[1..6] :";
 }
-void insertDatabase(){
+void insertDbTmp(){
     string data[][2] = {
         {"hello", "halo"}, {"good", "baik"}, {"morning", "pagi"}, {"night", "malam"}, {"thanks", "terima kasih"},
         {"sorry", "maaf"}, {"yes", "iya"}, {"no", "tidak"}, {"friend", "teman"}, {"family", "keluarga"},
@@ -340,7 +272,7 @@ void insertDatabase(){
         {"cat", "kucing"}, {"dog", "anjing"}, {"bird", "burung"}, {"fish", "ikan"}, {"cow", "sapi"},
         {"horse", "kuda"}, {"sheep", "domba"}, {"goat", "kambing"}, {"chicken", "ayam"}, {"duck", "bebek"}
     };
-    //tambah data ke bst
+    //tambah data ke bst via range-based for loop 
     for (auto& item : data) {
         insertNode(root, item[0], item[1]);
     }
